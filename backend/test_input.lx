@@ -1,0 +1,10 @@
+// A simple Flex program to test the da5l() input function
+
+print("This is a test of the input handling system.")
+print("Please enter your name:")
+name = da5l()
+print("Hello, {name}! Nice to meet you.")
+
+print("Please enter your favorite number:")
+favorite = da5l()
+print("Your favorite number is {favorite}. Good choice!") 

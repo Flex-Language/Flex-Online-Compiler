@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Online Compiler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Flex Online Compiler</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-page="compiler" href="#">Compiler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="examples" href="#">Examples</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="documentation" href="#">Documentation</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="shortcuts-link">
+                            <i class="bi bi-keyboard"></i> Shortcuts
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shortcuts Panel (Replacing Modal) -->
+    <div id="shortcuts-panel" class="shortcuts-panel">
+        <div class="shortcuts-header">
+            <h5>Keyboard Shortcuts</h5>
+            <button type="button" class="btn-close" id="shortcuts-close"></button>
+        </div>
+        <div class="shortcuts-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Shortcut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Enter</span></td>
+                        <td>Run code</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">S</span></td>
+                        <td>Save code to browser storage</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Tab</span></td>
+                        <td>Insert 4 spaces</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">/</span></td>
+                        <td>Toggle comment</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Z</span></td>
+                        <td>Undo</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Y</span></td>
+                        <td>Redo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <!-- Compiler Page -->
+        <div id="compiler-page" class="page active">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card editor-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>Flex Code Editor</h5>
+                            <div class="btn-group">
+                                <button id="run-button" class="btn btn-success">
+                                    <i class="bi bi-play-fill"></i> Run
+                                </button>
+                                <button id="clear-button" class="btn btn-secondary">
+                                    <i class="bi bi-trash"></i> Clear
+                                </button>
+                                <button id="save-button" class="btn btn-primary">
+                                    <i class="bi bi-download"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <textarea id="code-editor"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card output-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>Output</h5>
+                            <button id="clear-output-button" class="btn btn-sm btn-secondary">
+                                <i class="bi bi-trash"></i> Clear
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <pre id="output-area" class="mb-0"></pre>
+                        </div>
+                        <!-- Input Area - New Addition -->
+                        <div class="input-container">
+                            <div class="input-header">
+                                <span class="input-prompt">Program Input</span>
+                                <span class="input-status" id="input-status">Not waiting for input</span>
+                            </div>
+                            <div class="input-body">
+                                <div class="input-queue" id="input-queue"></div>
+                                <div class="input-field-container">
+                                    <input type="text" id="input-field" class="form-control" placeholder="Enter input...">
+                                    <button id="send-input-button" class="btn btn-primary">Send</button>
+                                </div>
+                                <div class="input-help">
+                                    <small class="text-muted">For programs using da5l() to receive input. You can add multiple inputs in advance.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Page -->
+        <div id="examples-page" class="page">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Flex Code Examples</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="examples-container">
+                                <!-- Examples will be loaded here dynamically -->
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentation Page -->
+        <div id="documentation-page" class="page">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Documentation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action doc-link"
+                                    data-doc="README">Getting Started</a>
+                                <a href="#" class="list-group-item list-group-item-action doc-link"
+                                    data-doc="QUICK_REFERENCE">Quick Reference</a>
+                                <a href="#" class="list-group-item list-group-item-action doc-link"
+                                    data-doc="TUTORIAL">Tutorial</a>
+                                <a href="#" class="list-group-item list-group-item-action doc-link"
+                                    data-doc="DOCUMENTATION">Full Documentation</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 id="doc-title">Documentation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="doc-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="js/flex-mode.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

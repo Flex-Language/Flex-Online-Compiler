@@ -1,0 +1,48 @@
+# Flex Input Demonstration Program
+
+print("Welcome to the Flex Input Demo!")
+print("This program shows how to use both input() and da5l() functions to get user input.")
+print("-------------------------------------------")
+
+# Using da5l()
+print("What is your name? (using da5l)")
+name = da5l()
+print("Hello, {name}! Nice to meet you.")
+
+# Using input()
+print("\nWhat is your age? (using input)")
+age_str = input()
+
+# Convert string to number
+age = 0
+if (age_str.isdigit()) {
+    age = int(age_str)
+} else {
+    print("Invalid age input!")
+}
+
+if (age > 0) {
+    print("You are {age} years old.")
+    
+    if (age < 18) {
+        print("You are a minor.")
+    } else {
+        print("You are an adult.")
+    }
+}
+
+# Area calculation example
+print("\nLet's calculate the area of a rectangle:")
+print("Enter width (using da5l):")
+width_str = da5l()
+width = int(width_str)
+
+print("Enter height (using input):")
+height_str = input()
+height = int(height_str)
+
+area = width * height
+print("The area of the rectangle is: {area} square units")
+
+print("\nThank you for testing the input functions!")
+print("You can queue multiple inputs in advance by adding them to the input area below.") 

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Input Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status.connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.waiting {
+            background-color: #fff3cd;
+            color: #856404;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        #output {
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-card {
+            border-color: #ffc107;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Flex WebSocket Input Test</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Connection Status</h5>
+                        <div>
+                            <button id="connect-btn" class="btn btn-success btn-sm">Connect</button>
+                            <button id="disconnect-btn" class="btn btn-danger btn-sm">Disconnect</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="connection-status" class="status disconnected">Disconnected</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Flex Code</h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea id="code-area" class="form-control" rows="10">// Enter your Flex code here
+print("Testing input handling in Flex")
+print("Please enter your name:")
+name = da5l()  // Using da5l() function
+print("Hello, {name}! Nice to meet you.")
+
+print("Please enter your age:")
+age = input()  // Using input() function
+print("You are {age} years old.")
+
+print("Both input() and da5l() functions work identically.")
+</textarea>
+                        <div class="mt-2">
+                            <button id="execute-btn" class="btn btn-primary">Execute Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Output</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="output"></div>
+                    </div>
+                </div>
+
+                <div class="card input-card" id="input-container">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Input</h5>
+                        <div id="input-status" class="status">Not waiting for input</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <input type="text" id="input-field" class="form-control" placeholder="Enter input here">
+                            <button id="send-input-btn" class="btn btn-outline-primary">Send</button>
+                        </div>
+                        <div>
+                            <small class="text-muted">For programs using input() or da5l() functions to receive
+                                input.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket variables
+        let socket = null;
+        let executionId = null;
+        let awaitingInput = false;
+        let programRunning = false;
+
+        // DOM Elements
+        const connectBtn = document.getElementById('connect-btn');
+        const disconnectBtn = document.getElementById('disconnect-btn');
+        const executeBtn = document.getElementById('execute-btn');
+        const sendInputBtn = document.getElementById('send-input-btn');
+        const inputField = document.getElementById('input-field');
+        const codeArea = document.getElementById('code-area');
+        const outputArea = document.getElementById('output');
+        const connectionStatus = document.getElementById('connection-status');
+        const inputStatus = document.getElementById('input-status');
+        const inputContainer = document.getElementById('input-container');
+
+        // Setup event listeners
+        connectBtn.addEventListener('click', connectWebSocket);
+        disconnectBtn.addEventListener('click', disconnectWebSocket);
+        executeBtn.addEventListener('click', executeCode);
+        sendInputBtn.addEventListener('click', sendInput);
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendInput();
+        });
+
+        // WebSocket Functions
+        function connectWebSocket() {
+            // Use secure WebSocket if the page is served over HTTPS
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+
+            console.log(`Connecting to ${wsUrl}...`);
+            socket = new WebSocket(wsUrl);
+
+            socket.onopen = function () {
+                console.log('WebSocket connection established');
+                connectionStatus.textContent = 'Connected';
+                connectionStatus.className = 'status connected';
+
+                // If there's an active execution, register it
+                if (executionId && programRunning) {
+                    registerExecution(executionId);
+                }
+            };
+
+            socket.onmessage = function (event) {
+                console.log('WebSocket message received:', event.data);
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'input_request') {
+                    awaitingInput = true;
+                    inputStatus.textContent = 'Waiting for input';
+                    inputStatus.className = 'status waiting';
+                    inputContainer.style.borderColor = '#ffc107';
+                    appendToOutput('[System] Input requested');
+                } else if (data.type === 'execution_complete') {
+                    programRunning = false;
+                    awaitingInput = false;
+                    executionId = null;
+                    executeBtn.textContent = 'Execute Code';
+                    inputStatus.textContent = 'Not waiting for input';
+                    inputStatus.className = 'status';
+                    inputContainer.style.borderColor = '';
+                    appendToOutput('[System] Execution completed');
+                } else if (data.type === 'output') {
+                    appendToOutput(data.content);
+                } else if (data.type === 'error') {
+                    appendToOutput(`[Error] ${data.content}`);
+                }
+            };
+
+            socket.onclose = function () {
+                console.log('WebSocket connection closed');
+                connectionStatus.textContent = 'Disconnected';
+                connectionStatus.className = 'status disconnected';
+
+                if (programRunning) {
+                    appendToOutput('[System] Connection lost during execution');
+                    programRunning = false;
+                    awaitingInput = false;
+                    executeBtn.textContent = 'Execute Code';
+                }
+            };
+
+            socket.onerror = function (error) {
+                console.error('WebSocket error:', error);
+                appendToOutput('[System] WebSocket error occurred');
+            };
+        }
+
+        function disconnectWebSocket() {
+            if (socket) {
+                socket.close();
+                socket = null;
+            }
+        }
+
+        function registerExecution(id) {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log(`Registering execution ${id}`);
+                socket.send(JSON.stringify({
+                    type: 'register_execution',
+                    executionId: id
+                }));
+            } else {
+                appendToOutput('[System] Cannot register execution - WebSocket not connected');
+            }
+        }
+
+        // Code Execution
+        function executeCode() {
+            if (programRunning) {
+                // Stop execution
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: 'stop_execution',
+                        executionId
+                    }));
+                }
+
+                programRunning = false;
+                awaitingInput = false;
+                executeBtn.textContent = 'Execute Code';
+                inputStatus.textContent = 'Not waiting for input';
+                inputStatus.className = 'status';
+                inputContainer.style.borderColor = '';
+                appendToOutput('[System] Execution stopped');
+                return;
+            }
+
+            const code = codeArea.value.trim();
+            if (!code) {
+                appendToOutput('[System] No code to execute');
+                return;
+            }
+
+            // Clear output
+            outputArea.innerHTML = '[System] Executing code...<br>';
+
+            // Send to server
+            fetch('/api/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        appendToOutput(`[Error] ${data.error}`);
+                        if (data.stderr) {
+                            appendToOutput(`[Error Details] ${data.stderr}`);
+                        }
+                    } else {
+                        // Show initial output if any
+                        if (data.output && data.output.length > 0) {
+                            data.output.forEach(line => appendToOutput(line));
+                        }
+
+                        // If execution ID is returned, register with WebSocket
+                        if (data.executionId) {
+                            executionId = data.executionId;
+                            programRunning = true;
+                            executeBtn.textContent = 'Stop Execution';
+                            console.log(`Execution started with ID: ${executionId}`);
+
+                            // Register with WebSocket
+                            if (socket && socket.readyState === WebSocket.OPEN) {
+                                registerExecution(executionId);
+                            } else {
+                                appendToOutput('[System] WebSocket not connected - reconnecting...');
+                                connectWebSocket();
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    appendToOutput(`[System Error] ${error.message}`);
+                });
+        }
+
+        // Input Handling
+        function sendInput() {
+            const input = inputField.value;
+
+            if (!awaitingInput) {
+                appendToOutput('[System] Not waiting for input');
+                return;
+            }
+
+            if (!programRunning) {
+                appendToOutput('[System] No program running');
+                return;
+            }
+
+            if (!executionId) {
+                appendToOutput('[System] No execution ID');
+                return;
+            }
+
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                appendToOutput('[System] WebSocket not connected');
+                return;
+            }
+
+            // Add input to output
+            appendToOutput(`> ${input}`);
+
+            // Send to server
+            socket.send(JSON.stringify({
+                type: 'input',
+                executionId,
+                content: input
+            }));
+
+            // Reset state
+            awaitingInput = false;
+            inputStatus.textContent = 'Input sent';
+            inputStatus.className = 'status';
+            inputContainer.style.borderColor = '';
+
+            // Clear input field
+            inputField.value = '';
+        }
+
+        // Helper Functions
+        function appendToOutput(text) {
+            const line = document.createElement('div');
+            line.innerHTML = text;
+            outputArea.appendChild(line);
+            outputArea.scrollTop = outputArea.scrollHeight;
+        }
+
+        // Auto-connect on page load
+        connectWebSocket();
+    </script>
+</body>
+
+</html>
