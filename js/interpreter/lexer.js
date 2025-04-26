@@ -10,6 +10,9 @@ class FlexLexer {
     this.current = 0;
     this.line = 1;
     
+    // Arabic keyword support (can be enabled/disabled)
+    this.useArabicKeywords = true;
+    
     // Token types
     this.TOKEN_TYPES = {
       // Single-character tokens
@@ -212,14 +215,29 @@ class FlexLexer {
   }
   
   /**
-   * Process an identifier or keyword
+   * Identifier handling - keywords and variable names
    */
   identifier() {
     while (this.isAlphaNumeric(this.peek())) this.advance();
     
-    // See if the identifier is a reserved word
+    // Extract the identifier text
     const text = this.source.substring(this.start, this.current);
-    const type = this.keywords[text] || this.TOKEN_TYPES.IDENTIFIER;
+    
+    // Check if it's a keyword
+    let type = this.keywords[text] || this.TOKEN_TYPES.IDENTIFIER;
+    
+    // Support for Arabic keywords if enabled
+    if (this.useArabicKeywords && type === this.TOKEN_TYPES.IDENTIFIER) {
+      // Arabic keyword mapping
+      const arabicKeywords = {
+        'etb3': this.TOKEN_TYPES.PRINT,
+        'da5l': this.TOKEN_TYPES.SCAN,
+        'd5l': this.TOKEN_TYPES.SCAN
+      };
+      
+      // Check if it's an Arabic keyword
+      type = arabicKeywords[text] || type;
+    }
     
     this.addToken(type);
   }
