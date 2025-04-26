@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Web Interpreter</title>
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/addon/edit/matchbrackets.min.js"></script>
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/editor.css">
+    <link rel="stylesheet" href="assets/css/terminal.css">
+    <link rel="stylesheet" href="assets/css/debugger.css">
+    <link rel="stylesheet" href="assets/css/documentation.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/logo.svg">
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/images/logo.svg" alt="Flex Logo" height="32">
+            <h1>Flex Web Interpreter</h1>
+        </div>
+        <nav>
+            <button id="run-button" class="action-button primary">Run <span class="shortcut">(Ctrl+Enter)</span></button>
+            <button id="debug-button" class="action-button">Debug <span class="shortcut">(Ctrl+Shift+Enter)</span></button>
+            <button id="stop-button" class="action-button danger disabled">Stop</button>
+            <button id="clear-button" class="action-button">Clear</button>
+            <button id="examples-button" class="action-button">Examples</button>
+            <button id="documentation-button" class="action-button">Docs</button>
+            <button id="save-button" class="action-button">Save</button>
+            <button id="open-button" class="action-button">Open</button>
+            <button id="settings-button" class="action-button">Settings</button>
+            <button id="help-button" class="action-button">Help</button>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="panel editor-panel">
+            <div class="panel-header">
+                <h2>Code Editor</h2>
+            </div>
+            <div class="panel-content">
+                <textarea id="code-editor"></textarea>
+            </div>
+        </div>
+        
+        <div class="panel terminal-panel">
+            <div class="panel-header">
+                <h2>Terminal</h2>
+            </div>
+            <div class="panel-content">
+                <div id="terminal"></div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Flex Web Interpreter v1.0.0 - Built with ❤️ for learning programming</p>
+        <p>Runs 100% in your browser - No server required</p>
+    </footer>
+    
+    <!-- Examples Modal -->
+    <div id="examples-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Flex Examples</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="examples-list" class="grid-list">
+                    <!-- Examples will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Open Modal -->
+    <div id="open-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Open Program</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="saved-programs-list" class="list">
+                    <!-- Saved programs will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Save Modal -->
+    <div id="save-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Save Program</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="save-form">
+                    <div class="form-group">
+                        <label for="program-name">Program Name:</label>
+                        <input type="text" id="program-name" placeholder="My Flex Program" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">Save</button>
+                        <button type="button" class="btn cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Help</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="help-content">
+                    <!-- Help content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documentation Modal -->
+    <div id="documentation-modal" class="modal">
+        <div class="modal-content documentation-content">
+            <div class="modal-header">
+                <h2>Flex Documentation</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="doc-sidebar">
+                <div class="search-container">
+                    <input type="text" id="doc-search" placeholder="Search documentation...">
+                </div>
+                <div class="doc-nav">
+                    <h3>Contents</h3>
+                    <ul id="doc-nav-list">
+                        <li><a href="#introduction" class="active">Introduction</a></li>
+                        <li><a href="#getting-started">Getting Started</a></li>
+                        <li><a href="#language-basics">Language Basics</a></li>
+                        <li><a href="#control-flow">Control Flow</a></li>
+                        <li><a href="#functions">Functions</a></li>
+                        <li><a href="#arrays">Arrays</a></li>
+                        <li><a href="#standard-library">Standard Library</a></li>
+                        <li><a href="#examples">Examples</a></li>
+                        <li><a href="#debugging">Debugging</a></li>
+                        <li><a href="#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="doc-content">
+                <div id="doc-content-container">
+                    <!-- Documentation content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Editor</h3>
+                    <div class="form-group">
+                        <label for="font-size">Font Size:</label>
+                        <select id="font-size">
+                            <option value="12px">Small</option>
+                            <option value="14px" selected>Medium</option>
+                            <option value="16px">Large</option>
+                            <option value="18px">Extra Large</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tab-size">Tab Size:</label>
+                        <select id="tab-size">
+                            <option value="2" selected>2 spaces</option>
+                            <option value="4">4 spaces</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Terminal</h3>
+                    <div class="form-group">
+                        <label for="terminal-font-size">Font Size:</label>
+                        <select id="terminal-font-size">
+                            <option value="12px">Small</option>
+                            <option value="14px" selected>Medium</option>
+                            <option value="16px">Large</option>
+                            <option value="18px">Extra Large</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Execution</h3>
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="auto-clear" checked>
+                        <label for="auto-clear">Clear terminal before each run</label>
+                    </div>
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="show-exec-time" checked>
+                        <label for="show-exec-time">Show execution time</label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="save-settings" class="btn primary">Save</button>
+                    <button id="reset-settings" class="btn">Reset to Defaults</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Interpreter Core -->
+    <script src="js/interpreter/lexer.js"></script>
+    <script src="js/interpreter/parser.js"></script>
+    <script src="js/interpreter/environment.js"></script>
+    <script src="js/interpreter/interpreter.js"></script>
+    
+    <!-- Standard Library -->
+    <script src="js/stdlib/io.js"></script>
+    <script src="js/stdlib/math.js"></script>
+    <script src="js/stdlib/string.js"></script>
+    
+    <!-- UI Components -->
+    <script src="js/ui/terminal.js"></script>
+    <script src="js/ui/editor.js"></script>
+    <script src="js/ui/modals.js"></script>
+    <script src="js/ui/documentation.js"></script>
+    
+    <!-- Utilities -->
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/error-handler.js"></script>
+    <script src="js/utils/error-formatter.js"></script>
+    <script src="js/utils/debugger.js"></script>
+    
+    <!-- Main App -->
+    <script src="js/main.js"></script>
+</body>
+</html>

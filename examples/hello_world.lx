@@ -1,0 +1,22 @@
+# Hello World Example in Flex
+# This demonstrates basic output and input
+
+# Print a welcome message
+etb3("مرحبا بالعالم!");  # Arabic: "Hello, World!"
+etb3("Welcome to Flex Programming Language!");
+
+# Ask for the user's name using Arabic syntax
+etb3("What is your name?");
+name = da5l();  # Arabic-style input function
+
+# Greet the user
+etb3("Hello, " + name + "! Nice to meet you.");
+
+# Demonstrate both Arabic and English syntax options
+etb3("The same message using different syntax styles:");
+print("This uses the print() function");
+etb3("This uses the etb3() function");  # Arabic-inspired keyword
+
+# Simple calculation
+etb3("Let me do a simple calculation for you...");
+etb3("5 + 10 = " + (5 + 10));

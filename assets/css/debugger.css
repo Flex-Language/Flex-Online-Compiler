@@ -1,0 +1,147 @@
+/* Debugger styles for Flex Web Interpreter */
+
+.debug-panel {
+    display: none;
+    flex-direction: column;
+    height: 200px;
+    background-color: #1e1e1e;
+    border-top: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.debug-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 8px;
+    background-color: #2d2d2d;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.debug-button {
+    background-color: #3a3a3a;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.debug-button:hover {
+    background-color: #4a4a4a;
+}
+
+.debug-button.danger {
+    background-color: rgba(255, 85, 85, 0.2);
+    color: var(--error-color);
+}
+
+.debug-button.danger:hover {
+    background-color: rgba(255, 85, 85, 0.3);
+}
+
+.debug-button .icon {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.debug-info {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.debug-section {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.debug-section h3 {
+    font-size: 14px;
+    color: var(--info-color);
+    margin-bottom: 8px;
+    font-weight: normal;
+}
+
+.debug-list {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    overflow-y: auto;
+    max-height: 120px;
+}
+
+.debug-item {
+    padding: 4px 8px;
+    border-bottom: 1px solid #333;
+}
+
+.debug-item:last-child {
+    border-bottom: none;
+}
+
+.debug-item.current-frame {
+    background-color: rgba(189, 147, 249, 0.1);
+    border-left: 2px solid var(--primary-color);
+}
+
+/* Variable formatting */
+.var-name {
+    color: #ff79c6;
+}
+
+.var-value {
+    margin-left: 4px;
+}
+
+.value-null {
+    color: #bd93f9;
+    font-style: italic;
+}
+
+.value-undefined {
+    color: #6272a4;
+    font-style: italic;
+}
+
+.value-number {
+    color: #f78c6c;
+}
+
+.value-string {
+    color: #c3e88d;
+}
+
+.value-boolean {
+    color: #ffcb6b;
+}
+
+.value-function, .value-object {
+    color: #8be9fd;
+}
+
+.value-array {
+    color: #82aaff;
+}
+
+/* Current line highlighting */
+.debug-current-line {
+    background-color: rgba(255, 203, 107, 0.2);
+    border-left: 2px solid #ffcb6b;
+}
+
+/* Breakpoint marker */
+.breakpoint-marker {
+    color: #ff5555;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Make the gutter clickable */
+.CodeMirror-gutters {
+    cursor: pointer;
+}
