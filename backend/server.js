@@ -80,7 +80,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Middleware
 // Example CORS configuration 
 app.use(cors({
-  origin: ['https://flex.mikawi.me', 'http://192.168.1.23:3000']
+  origin: ['https://flex.mikawi.org', 'http://192.168.1.23:3000']
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
