@@ -1,0 +1,78 @@
+# Fibonacci Sequence Calculator in Flex
+# Demonstrates recursion, loops, arrays, and function calls
+
+# Recursive Fibonacci function 
+# (Note: not efficient for large numbers due to repeated calculations)
+function fibonacci_recursive(n) {
+  if (n <= 1) {
+    return n;
+  }
+  return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2);
+}
+
+# Iterative Fibonacci function (more efficient)
+function fibonacci_iterative(n) {
+  if (n <= 1) {
+    return n;
+  }
+  
+  a = 0;
+  b = 1;
+  
+  for (i = 2; i <= n; i = i + 1) {
+    c = a + b;
+    a = b;
+    b = c;
+  }
+  
+  return b;
+}
+
+# Calculate and store Fibonacci numbers in an array
+function generate_fibonacci_sequence(count) {
+  sequence = [];
+  
+  for (i = 0; i < count; i = i + 1) {
+    sequence[i] = fibonacci_iterative(i);
+  }
+  
+  return sequence;
+}
+
+# Main program
+etb3("Fibonacci Sequence Calculator");
+etb3("---------------------------");
+
+# Ask user how many Fibonacci numbers to generate
+etb3("How many Fibonacci numbers would you like to generate? (1-20)");
+count = da5l();
+count = 1 * count;  # Convert string to number
+
+# Validate input
+if (count < 1) {
+  etb3("Error: Please enter a positive number!");
+} else if (count > 20) {
+  etb3("Warning: Large values might be slow to calculate.");
+  etb3("Limiting to 20 numbers for better performance.");
+  count = 20;
+}
+
+# Generate and display the sequence
+etb3("Generating Fibonacci sequence with " + count + " numbers:");
+sequence = generate_fibonacci_sequence(count);
+
+# Display the sequence using array
+for (i = 0; i < sequence.length; i = i + 1) {
+  etb3("Fibonacci(" + i + ") = " + sequence[i]);
+}
+
+# Calculate a single larger value for comparison
+etb3("\nCalculating Fibonacci(15) using different methods:");
+
+# Time the recursive approach
+etb3("Using recursive method: " + fibonacci_recursive(15));
+
+# Time the iterative approach
+etb3("Using iterative method: " + fibonacci_iterative(15));
+
+etb3("\nNote: For larger numbers, the iterative approach is much faster than the recursive one.");

@@ -1,0 +1,75 @@
+# Interactive Calculator in Flex
+# Demonstrates functions, conditionals, and user input
+
+# Define a function for addition
+function add(a, b) {
+  return a + b;
+}
+
+# Define a function for subtraction
+function subtract(a, b) {
+  return a - b;
+}
+
+# Define a function for multiplication
+function multiply(a, b) {
+  return a * b;
+}
+
+# Define a function for division
+function divide(a, b) {
+  if (b == 0) {
+    etb3("Error: Cannot divide by zero!");
+    return null;
+  }
+  return a / b;
+}
+
+# Main calculator program
+etb3("Simple Calculator");
+etb3("----------------");
+
+# Get first number from user
+etb3("Enter first number:");
+num1 = da5l();
+num1 = 1 * num1;  # Convert string to number
+
+# Get operation from user
+etb3("Enter operation (+, -, *, /):");
+op = da5l();
+
+# Get second number from user
+etb3("Enter second number:");
+num2 = da5l();
+num2 = 1 * num2;  # Convert string to number
+
+# Calculate result based on operation
+result = null;
+if (op == "+") {
+  result = add(num1, num2);
+} else if (op == "-") {
+  result = subtract(num1, num2);
+} else if (op == "*") {
+  result = multiply(num1, num2);
+} else if (op == "/") {
+  result = divide(num1, num2);
+} else {
+  etb3("Error: Invalid operation!");
+}
+
+# Display result if valid
+if (result != null) {
+  etb3(num1 + " " + op + " " + num2 + " = " + result);
+}
+
+# Ask if user wants to perform another calculation
+etb3("Do you want to perform another calculation? (yes/no)");
+answer = da5l();
+
+if (answer == "yes") {
+  etb3("Reloading calculator...");
+  # In a real program, we would loop back to the beginning
+  etb3("(In a full implementation, this would restart the calculator)");
+} else {
+  etb3("Thank you for using the calculator!");
+}

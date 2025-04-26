@@ -1,220 +1,118 @@
-# Flex Online Compiler
+# Flex Web Interpreter
 
-A comprehensive web-based IDE and compiler for the Flex programming language.
+A browser-based interpreter for the Flex programming language. Built with modern web technologies, this interpreter runs entirely client-side, with no server required.
 
 ## Features
 
-- **Code Editor**: Feature-rich editor with syntax highlighting for Flex
-- **Code Execution**: Run Flex code directly in the browser
-- **Examples Gallery**: Collection of example Flex programs
-- **Documentation**: Integrated language reference and tutorials
-- **Code Sharing**: Share your code with others via URL
-- **Local Storage**: Automatically saves your code in the browser
-- **Keyboard Shortcuts**: Convenient keyboard shortcuts for common actions
-- **Security**: Protected against malicious code execution
-- **Responsive Design**: Works on desktop and mobile devices
+- **100% Client-Side**: Runs entirely in your browser - no server needed
+- **Modern UI**: Clean, responsive interface with code editor and interactive terminal
+- **Syntax Highlighting**: Full support for Flex language syntax
+- **Error Reporting**: Clear, helpful error messages
+- **Multiple Syntax Styles**: Support for English, C-style, and Arabic-inspired keywords
+- **File Management**: Save and load your programs directly in the browser
+- **Example Programs**: Learn Flex with included example programs
+- **Standard Library**: Built-in functions for input/output, math, and string operations
+- **Progressive Web App**: Install and use offline
+- **GitHub Pages Compatible**: Deploy your own instance easily
+
+## How to Use
+
+1. Visit the [Flex Web Interpreter](https://your-username.github.io/flex-web/) on GitHub Pages
+2. Or open `index.html` in your browser locally
+3. Write your Flex code in the editor panel
+4. Click the "Run" button (or press Ctrl+Enter) to execute your code
+5. View output and interact with your program in the terminal panel
+6. Use the "Save" button to save your programs for later use
+
+## Deploying to GitHub Pages
+
+This interpreter is designed to run entirely on GitHub Pages with no server-side components required.
+
+### Automatic Deployment
+
+1. Fork this repository
+2. Go to your repository settings
+3. Navigate to "Pages" section
+4. Select the main branch as the source
+5. Your Flex Web Interpreter will be deployed at `https://your-username.github.io/flex-web/`
+
+### Manual Deployment
+
+1. Clone this repository: `git clone https://github.com/your-username/flex-web.git`
+2. Make your changes locally
+3. Push to your repository: 
+   ```
+   git add .
+   git commit -m "Your changes"
+   git push origin main
+   ```
+4. GitHub Actions will automatically deploy to GitHub Pages
+
+## Flex Language Overview
+
+Flex is a beginner-friendly programming language designed for learning. It supports multiple syntax styles:
+
+### Basic Syntax
+
+- **Comments**: Begin with `#` or enclosed in `/* ... */`
+- **Variables**: Dynamically typed, declare with `var`
+- **Printing**: Use `print()` or `etb3()`
+- **Input**: Use `scan()`, `da5l()`, or `d5l()`
+- **Functions**: Define with `function name(params) { ... }`
+- **Conditionals**: Use `if (condition) { ... } else { ... }`
+- **Loops**: Both `while` and `for` loops are supported
+- **Arrays**: Use square brackets `[]` for array literals
+
+### Example Flex Code
+
+```
+# Simple greeting program
+etb3("Welcome to Flex!");
+etb3("What is your name?");
+name = da5l();
+etb3("Hello, " + name + "!");
+
+# Simple loop
+for (i = 1; i <= 5; i = i + 1) {
+  etb3("Counting: " + i);
+}
+```
 
 ## Project Structure
 
-```
-flex-online/
-├── backend/             # Node.js backend
-│   ├── server.js        # Main server code
-│   ├── temp/            # Temporary files for code execution
-│   └── package.json     # Node.js dependencies
-├── frontend/            # Web frontend
-│   ├── index.html       # Main HTML file
-│   ├── css/             # Stylesheets
-│   │   └── styles.css   # Main CSS file
-│   └── js/              # JavaScript files
-│       ├── main.js      # Main application logic
-│       └── flex-mode.js # CodeMirror syntax highlighting for Flex
-├── logs/                # Application logs
-├── deploy.sh            # Deployment script for production
-└── ecosystem.config.js  # PM2 configuration
-```
+- `index.html`: Main HTML file
+- `assets/css/`: Stylesheets
+- `js/interpreter/`: Core interpreter components (lexer, parser, interpreter)
+- `js/ui/`: UI components (editor, terminal)
+- `js/stdlib/`: Standard library functions
+- `js/utils/`: Utility functions (error handling, virtual file system)
+- `examples/`: Example Flex programs
+- `.github/workflows/`: CI/CD pipelines for GitHub Pages deployment
+- `service-worker.js`: Service worker for offline capabilities
+- `manifest.json`: Web App Manifest for installable PWA
 
-## Technical Requirements
+## Development
 
-### Backend
-- Node.js 14.x or higher
-- Python 3.6 or higher (for Flex language execution)
+This project is built with pure JavaScript, HTML, and CSS, with CodeMirror for the editor component. All interpreter components, including lexer, parser, and runtime, are implemented in JavaScript.
 
-### Frontend
-- Modern web browser supporting ES6
+### Building Locally
 
-## Setup Instructions
+1. Clone the repository
+2. Open `index.html` in your browser
+3. No build step required for development
 
-### 1. Clone the Repository
+## Offline Capabilities
 
-```bash
-git clone <repository-url>
-cd flex-online
-```
+The interpreter supports Progressive Web App (PWA) features, allowing users to:
 
-### 2. Install Backend Dependencies
-
-```bash
-cd backend
-npm install
-```
-
-### 3. Configure Environment Variables
-
-Create a `.env` file in the backend directory:
-
-```
-PORT=3000
-NODE_ENV=development
-PYTHON_PATH=python3
-FLEX_SRC_PATH=../../src
-TEMP_DIR=./temp
-LOG_LEVEL=info
-```
-
-Adjust paths as needed for your environment.
-
-### 4. Create Necessary Directories
-
-```bash
-mkdir -p backend/temp logs
-```
-
-### 5. Start the Server (Development)
-
-```bash
-cd ..  # Return to project root
-node backend/server.js
-```
-
-### 6. Start the Server (Production)
-
-For quick production deployment, use the provided script:
-
-```bash
-./deploy.sh
-```
-
-Or manually:
-
-```bash
-# Install PM2 globally if not already installed
-npm install -g pm2
-
-# Start the application with PM2
-pm2 start ecosystem.config.js --env production
-```
-
-## Production Deployment
-
-For production deployment:
-
-1. Use the provided deployment script: `./deploy.sh`
-2. The script will:
-   - Install dependencies
-   - Create necessary directories
-   - Set environment to production
-   - Start the application with PM2
-   - Configure PM2 to start on system boot
-
-### Manual Production Setup
-
-1. Set the `NODE_ENV` to `production` in your environment variables
-2. Configure a reverse proxy (Nginx or Apache) to forward requests to your Node.js application
-3. Set up SSL certificates for secure HTTPS connections
-4. Consider using a process manager like PM2 for high availability
-
-### Security Considerations
-
-The application includes several security features:
-- Helmet for securing HTTP headers
-- XSS protection
-- Rate limiting to prevent abuse
-- Code execution timeout
-- Code validation to prevent dangerous operations
-
-## User Features
-
-### Keyboard Shortcuts
-
-- `Ctrl + Enter`: Run code
-- `Ctrl + S`: Save code to browser storage
-- `Tab`: Insert 4 spaces
-- `Ctrl + /`: Toggle comment
-- `Ctrl + Z`: Undo
-- `Ctrl + Y`: Redo
-
-### Code Sharing
-
-Share your code with others by clicking the "Share" button, which generates a URL containing your code that can be sent to others.
-
-### Local Storage
-
-Your code is automatically saved to the browser's local storage so you can continue where you left off when you return.
-
-## API Documentation
-
-### Execute Flex Code
-- **URL:** `/api/execute`
-- **Method:** POST
-- **Body:** `{ "code": "your Flex code here" }`
-- **Response:** `{ "output": "program output", "stderr": "error output if any" }`
-
-### Get Examples
-- **URL:** `/api/examples`
-- **Method:** GET
-- **Response:** Array of example objects with name and content
-
-### Get Documentation
-- **URL:** `/api/docs/:docFile`
-- **Method:** GET
-- **Params:** `docFile` - name of the documentation file (e.g., README, QUICK_REFERENCE)
-- **Response:** `{ "content": "markdown content" }`
-
-## Project Roadmap
-
-### Phase 1: MVP (Complete)
-- Basic code editor and execution
-- Examples and documentation integration
-
-### Phase 2: Enhanced Features (Current)
-- Code sharing and local storage
-- Security improvements
-- Keyboard shortcuts
-- Error handling improvements
-
-### Phase 3: Advanced Features (Planned)
-- User accounts and saved programs
-- More advanced code editor features (autocomplete, etc.)
-- Debugging tools
-- Collaborative editing
-- Version control integration
-- IDE plugins and extensions
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## Troubleshooting
-
-### Common Issues
-
-- **"Error connecting to server"**: Make sure the backend server is running and accessible
-- **"Code execution timed out"**: Your code might be in an infinite loop or taking too long to execute
-- **"Invalid code detected"**: The code might contain potentially unsafe operations
-
-For more detailed troubleshooting, check the logs in the `logs` directory.
+1. Install it on their device (desktop or mobile)
+2. Use it offline
+3. Get faster loading times with service worker caching
 
 ## License
 
-[MIT License](LICENSE)
+MIT License - Feel free to use, modify, and distribute this code.
 
-## Acknowledgments
+## Credits
 
-- Flex language developers
-- CodeMirror for the code editor
-- Bootstrap for the UI framework
-- PM2 for process management 
+Created for learning purposes. Special thanks to the programming language design community for inspiration.

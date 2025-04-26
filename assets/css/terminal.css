@@ -1,0 +1,160 @@
+/* Terminal styles for Flex Web Interpreter */
+
+#terminal {
+    width: 100%;
+    height: 100%;
+    background-color: #1e1e1e;
+    color: #f8f8f2;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.terminal-output {
+    width: 100%;
+}
+
+.terminal-line {
+    margin-bottom: 5px;
+    overflow-wrap: break-word;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in forwards;
+}
+
+.terminal-input-container {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+    border: 1px solid #333;
+    background-color: #252525;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.terminal-prompt {
+    padding: 5px 8px;
+    background-color: #444;
+    color: #f8f8f2;
+    flex-shrink: 0;
+}
+
+.terminal-input {
+    flex-grow: 1;
+    background-color: transparent;
+    border: none;
+    color: #f8f8f2;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    padding: 5px 8px;
+    width: 100%;
+    outline: none;
+}
+
+/* Message type styles */
+.info {
+    color: #8be9fd;
+}
+
+.success {
+    color: #50fa7b;
+}
+
+.warning {
+    color: #ffb86c;
+}
+
+.error {
+    color: #ff5555;
+}
+
+.input-echo {
+    color: #bd93f9;
+    font-style: italic;
+}
+
+.error-context {
+    color: #ff79c6;
+    margin-left: 20px;
+    font-size: 0.9em;
+}
+
+/* Animation for cursor blinking */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1em;
+    background-color: #f8f8f2;
+    margin-bottom: -0.2em;
+    animation: blink 1s step-end infinite;
+}
+
+/* Status spinner for busy indicator */
+.spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #f8f8f2;
+    animation: spin 1s linear infinite;
+    margin-right: 5px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Customized scrollbar */
+#terminal::-webkit-scrollbar {
+    width: 8px;
+    background-color: #1e1e1e;
+}
+
+#terminal::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+#terminal::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Terminal output animations */
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Specific styling for Arabic text */
+.rtl-text {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Amiri', 'Arial', sans-serif;
+}
+
+/* Help text styling */
+.help-text {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Link styling within terminal */
+.terminal-link {
+    color: #8be9fd;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.terminal-link:hover {
+    color: #50fa7b;
+}

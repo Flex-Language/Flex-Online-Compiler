@@ -1,0 +1,136 @@
+/* Editor styles for Flex Web Interpreter */
+
+.editor-container {
+    height: 100%;
+    position: relative;
+}
+
+.CodeMirror {
+    height: 100%;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Custom Flex syntax highlighting */
+.cm-keyword {
+    color: #c792ea;
+    font-weight: bold;
+}
+
+.cm-variable {
+    color: #f7f7f7;
+}
+
+.cm-string {
+    color: #c3e88d;
+}
+
+.cm-number {
+    color: #f78c6c;
+}
+
+.cm-operator {
+    color: #89ddff;
+}
+
+.cm-comment {
+    color: #545454;
+    font-style: italic;
+}
+
+/* Line number styles */
+.CodeMirror-linenumber {
+    color: #616161;
+}
+
+/* Error styling */
+.error-line {
+    background-color: rgba(255, 87, 87, 0.2);
+    position: relative;
+}
+
+.error-marker {
+    color: #ff5757;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.error-tooltip {
+    position: absolute;
+    background: #2d2d2d;
+    border: 1px solid #ff5757;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    z-index: 100;
+    max-width: 300px;
+    white-space: normal;
+    font-family: sans-serif;
+    font-size: 12px;
+    display: none;
+}
+
+.error-marker:hover + .error-tooltip {
+    display: block;
+}
+
+/* Custom gutters */
+.CodeMirror-gutters {
+    background-color: #1e1e1e;
+    border-right: 1px solid #333;
+}
+
+.CodeMirror-gutter.error-gutter {
+    width: 20px;
+}
+
+/* Selection styling */
+.CodeMirror-selected {
+    background-color: rgba(128, 203, 196, 0.2) !important;
+}
+
+/* Active line highlight */
+.CodeMirror-activeline-background {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Matching bracket highlight */
+.CodeMirror-matchingbracket {
+    color: #ffcb6b !important;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Cursor styling */
+.CodeMirror-cursor {
+    border-left: 2px solid #fff;
+    border-right: none;
+    width: 0;
+}
+
+/* Scrollbar styling */
+.CodeMirror-simplescroll-scrollbar {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.CodeMirror-simplescroll-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+/* Specific syntax highlighting for Flex special keywords */
+.cm-etb3, .cm-da5l, .cm-d5l {
+    color: #82aaff;
+    font-weight: bold;
+}
+
+/* Error and warning squiggles */
+.cm-error {
+    text-decoration: wavy underline #f44336;
+}
+
+.cm-warning {
+    text-decoration: wavy underline #ffab40;
+}

@@ -1,0 +1,209 @@
+# Flex Language Showcase
+# This example demonstrates most features of the Flex programming language
+
+# ===== Basic Output =====
+etb3("===== Flex Language Showcase =====");
+etb3("This program demonstrates the core features of Flex");
+etb3("");
+
+# ===== Variables and Data Types =====
+etb3("--- Variables and Data Types ---");
+
+# Number
+number = 42;
+decimal = 3.14159;
+etb3("Number: " + number);
+etb3("Decimal: " + decimal);
+
+# String
+greeting = "Hello, Flex!";
+etb3("String: " + greeting);
+
+# Boolean
+is_learning = true;
+etb3("Boolean: " + is_learning);
+
+# Null
+empty_value = null;
+etb3("Null value: " + empty_value);
+
+# Array
+colors = ["red", "green", "blue", "yellow"];
+etb3("Array: " + colors);
+etb3("Array length: " + colors.length);
+etb3("First element: " + colors[0]);
+etb3("Last element: " + colors[colors.length - 1]);
+etb3("");
+
+# ===== Operators =====
+etb3("--- Operators ---");
+
+# Arithmetic operators
+a = 10;
+b = 3;
+etb3("a = " + a + ", b = " + b);
+etb3("Addition (a + b): " + (a + b));
+etb3("Subtraction (a - b): " + (a - b));
+etb3("Multiplication (a * b): " + (a * b));
+etb3("Division (a / b): " + (a / b));
+etb3("Modulus (a % b): " + (a % b));
+
+# Comparison operators
+etb3("Equal (a == b): " + (a == b));
+etb3("Not equal (a != b): " + (a != b));
+etb3("Greater than (a > b): " + (a > b));
+etb3("Less than (a < b): " + (a < b));
+etb3("Greater or equal (a >= b): " + (a >= b));
+etb3("Less or equal (a <= b): " + (a <= b));
+
+# Logical operators
+c = true;
+d = false;
+etb3("c = " + c + ", d = " + d);
+etb3("AND (c && d): " + (c && d));
+etb3("OR (c || d): " + (c || d));
+etb3("NOT (!c): " + (!c));
+etb3("");
+
+# ===== Conditional Statements =====
+etb3("--- Conditional Statements ---");
+
+# If statement
+score = 85;
+etb3("Score: " + score);
+
+if (score >= 90) {
+    etb3("Grade: A");
+} else if (score >= 80) {
+    etb3("Grade: B");
+} else if (score >= 70) {
+    etb3("Grade: C");
+} else if (score >= 60) {
+    etb3("Grade: D");
+} else {
+    etb3("Grade: F");
+}
+etb3("");
+
+# ===== Loops =====
+etb3("--- Loops ---");
+
+# For loop
+etb3("For loop counting from 1 to 5:");
+for (i = 1; i <= 5; i = i + 1) {
+    etb3("Count: " + i);
+}
+
+# While loop
+etb3("While loop counting down from 5 to 1:");
+countdown = 5;
+while (countdown > 0) {
+    etb3("Countdown: " + countdown);
+    countdown = countdown - 1;
+}
+etb3("");
+
+# ===== Functions =====
+etb3("--- Functions ---");
+
+# Function definition
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+# Function with multiple parameters
+function calculateArea(length, width) {
+    return length * width;
+}
+
+# Function with default behavior
+function isEven(num) {
+    if (num % 2 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+# Function calls
+etb3(greet("Learner"));
+etb3("Area of rectangle (5x3): " + calculateArea(5, 3));
+etb3("Is 7 even? " + isEven(7));
+etb3("Is 8 even? " + isEven(8));
+etb3("");
+
+# ===== Array Manipulation =====
+etb3("--- Array Manipulation ---");
+
+numbers = [10, 20, 30, 40, 50];
+etb3("Original array: " + numbers);
+
+# Add element to array
+numbers[numbers.length] = 60;
+etb3("After adding 60: " + numbers);
+
+# Sum of array elements
+sum = 0;
+for (i = 0; i < numbers.length; i = i + 1) {
+    sum = sum + numbers[i];
+}
+etb3("Sum of all elements: " + sum);
+etb3("Average: " + (sum / numbers.length));
+
+# Find maximum value
+max_value = numbers[0];
+for (i = 1; i < numbers.length; i = i + 1) {
+    if (numbers[i] > max_value) {
+        max_value = numbers[i];
+    }
+}
+etb3("Maximum value: " + max_value);
+etb3("");
+
+# ===== Standard Library Functions =====
+etb3("--- Standard Library Functions ---");
+
+# Math functions
+etb3("Math.PI: " + PI);
+etb3("Absolute value of -42: " + abs(-42));
+etb3("Square root of 16: " + sqrt(16));
+etb3("2 raised to power 8: " + pow(2, 8));
+etb3("Rounded value of 9.7: " + round(9.7));
+etb3("Floor value of 9.7: " + floor(9.7));
+etb3("Ceiling value of 9.2: " + ceil(9.2));
+etb3("Minimum of 5, 2, 8: " + min(5, 2, 8));
+etb3("Maximum of 5, 2, 8: " + max(5, 2, 8));
+
+# String functions
+text = "  Hello Flex World!  ";
+etb3("Original text: '" + text + "'");
+etb3("Length: " + length(text));
+etb3("Uppercase: " + toUpper(text));
+etb3("Lowercase: " + toLower(text));
+etb3("Trimmed: '" + trim(text) + "'");
+etb3("Contains 'Flex'? " + contains(text, "Flex"));
+etb3("Position of 'World': " + indexOf(text, "World"));
+etb3("Substring (6, 10): '" + substring(text, 6, 10) + "'");
+etb3("Replace 'World' with 'Universe': " + replace(text, "World", "Universe"));
+etb3("");
+
+# ===== User Input =====
+etb3("--- User Input ---");
+etb3("The following section demonstrates user input.");
+etb3("When you run this program, you'll be asked to enter your name and age.");
+
+etb3("What is your name?");
+user_name = da5l();
+
+etb3("How old are you?");
+user_age = da5l();
+user_age = 1 * user_age;  # Convert string to number
+
+etb3("Hello, " + user_name + "! You are " + user_age + " years old.");
+etb3("In 10 years, you will be " + (user_age + 10) + " years old.");
+etb3("");
+
+# ===== Program Complete =====
+etb3("===== Program Complete =====");
+etb3("You've seen the core features of the Flex programming language!");
+etb3("Check the documentation for more details on each feature.");
